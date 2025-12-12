@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de feuilles PDF/PNG</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Générateur de feuilles personnalisées</h1>
+        <p>Créez vos feuilles vierges, quadrillées ou pointillées en PDF ou PNG !</p>
+    </header>
+
+    <main>
+        <section class="controls">
+            <label for="type">Type de feuille :</label>
+            <select id="type">
+                <option value="vierge">Vierge</option>
+                <option value="quadrille5">Quadrillée 5×5 mm</option>
+                <option value="quadrille10">Quadrillée 1 cm</option>
+                <option value="quadrille2.5">Quadrillée 2,5 mm</option>
+                <option value="pointille5">Pointillée 5 mm</option>
+                <option value="pointille10">Pointillée 1 cm</option>
+                <option value="isometrique">Isométrique</option>
+                <option value="hexagonale">Hexagonale</option>
+                <option value="ligneSimple">Lignes simples</option>
+                <option value="ligneDouble">Lignes doubles</option>
+            </select>
+
+            <label for="size">Taille de la grille (mm) :</label>
+            <input type="number" id="size" value="5" min="2" max="20">
+
+            <label for="color">Couleur des lignes :</label>
+            <input type="color" id="color" value="#cccccc">
+
+            <label for="orientation">Orientation :</label>
+            <select id="orientation">
+                <option value="portrait">Portrait</option>
+                <option value="paysage">Paysage</option>
+            </select>
+
+            <button onclick="generate()">Générer</button>
+        </section>
+
+        <section class="preview">
+            <canvas id="sheet" width="800" height="1100"></canvas>
+            <div class="buttons">
+                <button onclick="downloadPNG()">Télécharger PNG</button>
+                <button onclick="downloadPDF()">Télécharger PDF</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Générateur de feuilles. Tous droits réservés.</p>
+        <p>Zone future pour publicité ou annonces.</p>
+    </footer>
+
+    <script src="script.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+
+</html>
