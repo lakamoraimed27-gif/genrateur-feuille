@@ -1,66 +1,23 @@
-function generate() {
-let type = document.getElementById("type").value;
-let size = parseFloat(document.getElementById("size").value);
-let color = document.getElementById("color").value;
-let orientation = document.getElementById("orientation").value;
-
-
-let canvas = document.getElementById("sheet");
-let ctx = canvas.getContext("2d");
-
-
-if(orientation === "paysage") { canvas.width = 1100; canvas.height = 800; }
-else { canvas.width = 800; canvas.height = 1100; }
-
-
-ctx.clearRect(0, 0, canvas.width, canvas.height);
-ctx.fillStyle = "#fff";
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-
-ctx.strokeStyle = color;
-ctx.lineWidth = 1;
-
-
-const pxPerMm = 3.78;
-const step = size * pxPerMm;
-
-
-switch(type) {
-case "vierge": break;
-case "quadrille5": case "quadrille10": case "quadrille2.5":
-case "pointille5": case "pointille10": case "ligneSimple": case "ligneDouble":
-drawGrid(ctx, canvas, step, type); break;
-case "isometrique": drawIsometric(ctx, canvas, step); break;
-case "hexagonale": drawHex(ctx, canvas, step); break;
-}
+/* RESET */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-
-function drawGrid(ctx, canvas, step, type){
-for(let x=0;x<=canvas.width;x+=step){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
-for(let y=0;y<=canvas.height;y+=step){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
-if(type==="ligneDouble"){
-let halfStep = step/2;
-for(let y=0;y<=canvas.height;y+=step){ ctx.beginPath(); ctx.moveTo(0,y+halfStep); ctx.lineTo(canvas.width,y+halfStep); ctx.stroke(); }
-}
+/* GLOBAL */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+    line-height: 1.6;
 }
 
-
-function drawIsometric(ctx, canvas, step){
-let height = Math.sin(Math.PI/3)*step;
-for(let y=0;y<=canvas.height+height;y+=height){
-for(let x=0;x<=canvas.width+step;x+=step){
-ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+step/2,y-height); ctx.lineTo(x+step,y); ctx.stroke();
-}
-
-pdf.save('feuille.pdf');
-  /* Menu */
+/* MENU */
 .menu {
-    width: 100%;
     background: #ffffff;
     border-bottom: 1px solid #ddd;
-    padding: 15px 20px;
+    padding: 15px 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -72,35 +29,19 @@ pdf.save('feuille.pdf');
 .menu .logo {
     font-size: 20px;
     font-weight: bold;
-    color: #333;
 }
 
-.menu nav ul {
+.menu ul {
     list-style: none;
     display: flex;
     gap: 20px;
 }
 
-.menu nav ul li a {
+.menu a {
     text-decoration: none;
     color: #333;
     font-weight: 600;
-    transition: 0.3s;
 }
 
-.menu nav ul li a:hover {
-    color: #007bff;
-}
-
-/* Responsive pour téléphone */
-@media(max-width: 600px) {
-    .menu {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .menu nav ul {
-        flex-direction: column;
-        gap: 10px;
-        padding-top: 10px;
-    }
-}
+.menu a:hover {
+    color: #007
