@@ -1,19 +1,23 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Générateur de feuilles PDF/PNG</title>
+    <title>Générateur de feuilles PDF / PNG</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body> 
-    <!-- MENU ICI (tout en haut) -->
+
+<body>
+
+    <!-- MENU -->
     <header class="menu">
         <div class="logo">Générateur de Feuilles</div>
         <nav>
             <ul>
                 <li><a href="#generateur">Générateur</a></li>
-                <li><a href="#types">Types de feuilles</a></li>
+                <li><a href="#types">Types</a></li>
                 <li><a href="#faq">FAQ</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -21,74 +25,91 @@
     </header>
 
     <!-- CONTENU PRINCIPAL -->
-    <main id="generateur">
-        ...
-    </main>
-
-    <!-- FOOTER -->
-    <footer>
-        ...
-    </footer>
-
-</body>
-
-    <header>
-        <h1>Générateur de feuilles personnalisées</h1>
-        <p>Créez vos feuilles vierges, quadrillées ou pointillées en PDF ou PNG !</p>
-    </header>
-
     <main>
-        <section class="controls">
-            <label for="type">Type de feuille :</label>
-            <select id="type">
-                <option value="vierge">Vierge</option>
-                <option value="quadrille5">Quadrillée 5×5 mm</option>
-                <option value="quadrille10">Quadrillée 1 cm</option>
-                <option value="quadrille2.5">Quadrillée 2,5 mm</option>
-                <option value="pointille5">Pointillée 5 mm</option>
-                <option value="pointille10">Pointillée 1 cm</option>
-                <option value="isometrique">Isométrique</option>
-                <option value="hexagonale">Hexagonale</option>
-                <option value="ligneSimple">Lignes simples</option>
-                <option value="ligneDouble">Lignes doubles</option>
-            </select>
 
-            <label for="size">Taille de la grille (mm) :</label>
-            <input type="number" id="size" value="5" min="2" max="20">
+        <!-- GÉNÉRATEUR -->
+        <section id="generateur" class="section">
+            <h1>Générateur de feuilles personnalisées</h1>
+            <p>Créez vos feuilles vierges, quadrillées ou pointillées en PDF ou PNG.</p>
 
-            <label for="color">Couleur des lignes :</label>
-            <input type="color" id="color" value="#cccccc">
+            <div class="controls">
+                <label>Type de feuille :</label>
+                <select id="type">
+                    <option value="vierge">Vierge</option>
+                    <option value="quadrille5">Quadrillée 5×5 mm</option>
+                    <option value="quadrille10">Quadrillée 1 cm</option>
+                    <option value="pointille5">Pointillée 5 mm</option>
+                    <option value="isometrique">Isométrique</option>
+                    <option value="hexagonale">Hexagonale</option>
+                    <option value="ligneSimple">Lignes simples</option>
+                    <option value="ligneDouble">Lignes doubles</option>
+                </select>
 
-            <label for="orientation">Orientation :</label>
-            <select id="orientation">
-                <option value="portrait">Portrait</option>
-                <option value="paysage">Paysage</option>
-            </select>
+                <label>Taille de la grille (mm) :</label>
+                <input type="number" id="size" value="5" min="2" max="20">
 
-            <button onclick="generate()">Générer</button>
-        </section>
+                <label>Couleur des lignes :</label>
+                <input type="color" id="color" value="#cccccc">
 
-        <section class="preview">
+                <label>Orientation :</label>
+                <select id="orientation">
+                    <option value="portrait">Portrait</option>
+                    <option value="paysage">Paysage</option>
+                </select>
+
+                <button onclick="generate()">Générer</button>
+            </div>
+
             <canvas id="sheet" width="800" height="1100"></canvas>
+
             <div class="buttons">
                 <button onclick="downloadPNG()">Télécharger PNG</button>
                 <button onclick="downloadPDF()">Télécharger PDF</button>
             </div>
         </section>
+
+        <!-- TYPES -->
+        <section id="types" class="section">
+            <h2>📄 Types de feuilles disponibles</h2>
+            <ul>
+                <li>Feuille vierge</li>
+                <li>Quadrillée 5×5 mm</li>
+                <li>Quadrillée 1 cm</li>
+                <li>Pointillée</li>
+                <li>Isométrique</li>
+                <li>Hexagonale</li>
+                <li>Lignes simples et doubles</li>
+            </ul>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="section">
+            <h2>❓ FAQ</h2>
+            <p><strong>Le service est-il gratuit ?</strong><br>Oui, 100% gratuit.</p>
+            <p><strong>Les fichiers sont-ils téléchargeables ?</strong><br>Oui, en PDF et PNG.</p>
+            <p><strong>Mes données sont-elles sauvegardées ?</strong><br>Non, tout se fait localement.</p>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="section">
+            <h2>📬 Contact</h2>
+            <p>Pour toute question ou partenariat :</p>
+            <p><strong>Email :</strong> contact@exemple.com</p>
+        </section>
+
     </main>
 
+    <!-- FOOTER -->
     <footer>
-        <p>&copy; 2025 Générateur de feuilles. Tous droits réservés.</p>
-        <p>Zone future pour publicité ou annonces.</p>
+        © 2025 Générateur de feuilles – Tous droits réservés
     </footer>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="script.js"></script>
+
+    <!-- SCRIPTS (TOUJOURS ICI) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+
 </body>
 </html>
-
-
-
 
 
 
