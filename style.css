@@ -71,6 +71,10 @@ canvas {
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
+/* BONUS : équilibre visuel bas de page */
+main {
+    padding-bottom: 60px;
+
 
 
 
