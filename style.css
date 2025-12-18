@@ -52,6 +52,25 @@ body {
     scroll-margin-top: 90px;
 } 
 
+/* Donner de la hauteur aux sections */
+.section {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Mieux équilibrer le générateur */
+#generateur {
+    min-height: 80vh;
+}
+
+/* Donner plus de présence au canvas */
+canvas {
+    margin: 30px auto;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
 
 
 
