@@ -44,10 +44,15 @@ body {
 }
 
 .menu a:hover {
-    color: #007
-    .section {
-    scroll-margin-top: 90px;
+       color: #007bff;
 }
+
+/* Décalage pour menu sticky */
+.section {
+    scroll-margin-top: 90px;
+} 
+
+
 
 
 
