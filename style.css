@@ -45,3 +45,9 @@ body {
 
 .menu a:hover {
     color: #007
+    .section {
+    scroll-margin-top: 90px;
+}
+
+
+
