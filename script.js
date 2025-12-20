@@ -1,45 +1,67 @@
-// Récupération du canvas
 const canvas = document.getElementById("sheet");
 const ctx = canvas.getContext("2d");
 
-// Dessin simple (exemple)
-function generate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+// Conversion mm → pixels (approx écran)
+const MM_TO_PX = 3.78;
 
-    // Fond blanc
+function clearCanvas() {
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    console.log("Génération lancée");
 }
 
-// Télécharger en PNG
-function downloadPNG() {
-    const link = document.createElement("a");
-    link.download = "feuille.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
+function drawGrid(sizeMM, color) {
+    const sizePX = sizeMM * MM_TO_PX;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+
+    for (let x = 0; x <= canvas.width; x += sizePX) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+    }
+
+    for (let y = 0; y <= canvas.height; y += sizePX) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+    }
 }
 
-// Télécharger en PDF A4
+function generate() {
+    clearCanvas();
+
+    const type = document.getElementById("type").value;
+    const size = parseInt(document.getElementById("size").value);
+    const color = document.getElementById("color").value;
+
+    if (type === "quadrille5") drawGrid(5, color);
+    if (type === "quadrille10") drawGrid(10, color);
+    if (type === "vierge") return;
+
+    console.log("Feuille générée :", type);
+}
 function downloadPDF() {
     const { jsPDF } = window.jspdf;
-
-    const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4"
-    });
+    const pdf = new jsPDF("portrait", "mm", "a4");
 
     const imgData = canvas.toDataURL("image/png");
 
-    // Dimensions A4 utiles
     const margin = 10;
-    const pdfWidth = 210 - margin * 2;
-    const pdfHeight = 297 - margin * 2;
+    const width = 210 - margin * 2;
+    const height = 297 - margin * 2;
 
-    pdf.addImage(imgData, "PNG", margin, margin, pdfWidth, pdfHeight);
+    pdf.addImage(imgData, "PNG", margin, margin, width, height);
     pdf.save("feuille_A4.pdf");
-
-    console.log("PDF téléchargé");
 }
+function previewPDF() {
+    const img = canvas.toDataURL("image/png");
+    const w = window.open("");
+    w.document.write(`<img src="${img}" style="width:100%">`);
+}
+window.onload = () => {
+    generate();
+};
+
+
