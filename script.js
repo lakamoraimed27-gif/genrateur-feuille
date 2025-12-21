@@ -79,3 +79,4 @@ function downloadPNG() {
 window.onload = () => {
     generate();
 };
+
