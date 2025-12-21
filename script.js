@@ -88,7 +88,50 @@ function previewPDF() {
 
 // Auto-génération au chargement
 window.onload = () => {
-    generate();
-};
+   function drawDottedGrid(sizeMM, color) {
+    const sizePX = sizeMM * MM_TO_PX;
+    ctx.fillStyle = color;
+
+    const radius = 1; // taille du point
+
+    for (let x = 0; x <= canvas.width; x += sizePX) {
+        for (let y = 0; y <= canvas.height; y += sizePX) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+}
+function generate() {
+    clearCanvas();
+
+    const type = document.getElementById("type").value;
+    const size = parseInt(document.getElementById("size").value) || 5;
+    const color = document.getElementById("color").value || "#000000";
+
+    switch (type) {
+        case "quadrille5":
+            drawGrid(5, color);
+            break;
+
+        case "quadrille10":
+            drawGrid(10, color);
+            break;
+
+        case "pointille5":
+            drawDottedGrid(5, color);
+            break;
+
+        case "vierge":
+            break;
+
+        default:
+            drawGrid(size, color);
+    }
+
+    console.log("Feuille générée :", type);
+}
+
+
 
 
