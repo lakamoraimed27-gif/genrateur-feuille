@@ -1,16 +1,15 @@
 const canvas = document.getElementById("sheet");
 const ctx = canvas.getContext("2d");
 
-// Conversion mm → pixels (approx écran)
 const MM_TO_PX = 3.78;
 
-// Efface le canvas
+// Effacer le canvas
 function clearCanvas() {
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-// Dessine une grille quadrillée simple
+// Grille quadrillée
 function drawGrid(sizeMM, color) {
     const sizePX = sizeMM * MM_TO_PX;
     ctx.strokeStyle = color;
@@ -31,47 +30,44 @@ function drawGrid(sizeMM, color) {
     }
 }
 
-// Dessin de la feuille selon le type
+// Grille pointillée
+function drawDottedGrid(sizeMM, color) {
+    const sizePX = sizeMM * MM_TO_PX;
+    ctx.fillStyle = color;
+
+    for (let x = 0; x <= canvas.width; x += sizePX) {
+        for (let y = 0; y <= canvas.height; y += sizePX) {
+            ctx.beginPath();
+            ctx.arc(x, y, 1, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+}
+
+// Génération
 function generate() {
     clearCanvas();
 
     const type = document.getElementById("type").value;
-    const size = parseInt(document.getElementById("size").value) || 5;
-    const color = document.getElementById("color").value || "#000000";
+    const color = document.getElementById("color").value;
 
-    switch(type) {
-        case "quadrille5":
-            drawGrid(5, color);
-            break;
-        case "quadrille10":
-            drawGrid(10, color);
-            break;
-        case "vierge":
-            break;
-        // futur : ajouter pointillé, isométrique, hexagonale
-        default:
-            drawGrid(size, color);
-            break;
-    }
-
-    console.log("Feuille générée :", type);
+    if (type === "quadrille5") drawGrid(5, color);
+    if (type === "quadrille10") drawGrid(10, color);
+    if (type === "pointille5") drawDottedGrid(5, color);
+    if (type === "vierge") return;
 }
 
-// Télécharger la feuille en PDF A4
+// Télécharger PDF
 function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF("portrait", "mm", "a4");
 
-    const imgData = canvas.toDataURL("image/png");
-    const margin = 10;
-    const width = 210 - margin * 2;
-    const height = 297 - margin * 2;
-
-    pdf.addImage(imgData, "PNG", margin, margin, width, height);
+    const img = canvas.toDataURL("image/png");
+    pdf.addImage(img, "PNG", 10, 10, 190, 277);
     pdf.save("feuille_A4.pdf");
 }
 
-// Télécharger en PNG
+// Télécharger PNG
 function downloadPNG() {
     const link = document.createElement("a");
     link.download = "feuille.png";
@@ -79,59 +75,7 @@ function downloadPNG() {
     link.click();
 }
 
-// Aperçu rapide
-function previewPDF() {
-    const img = canvas.toDataURL("image/png");
-    const w = window.open("");
-    w.document.write(`<img src="${img}" style="width:100%">`);
-}
-
-// Auto-génération au chargement
+// Génération automatique au chargement
 window.onload = () => {
-   function drawDottedGrid(sizeMM, color) {
-    const sizePX = sizeMM * MM_TO_PX;
-    ctx.fillStyle = color;
-
-    const radius = 1; // taille du point
-
-    for (let x = 0; x <= canvas.width; x += sizePX) {
-        for (let y = 0; y <= canvas.height; y += sizePX) {
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-}
-function generate() {
-    clearCanvas();
-
-    const type = document.getElementById("type").value;
-    const size = parseInt(document.getElementById("size").value) || 5;
-    const color = document.getElementById("color").value || "#000000";
-
-    switch (type) {
-        case "quadrille5":
-            drawGrid(5, color);
-            break;
-
-        case "quadrille10":
-            drawGrid(10, color);
-            break;
-
-        case "pointille5":
-            drawDottedGrid(5, color);
-            break;
-
-        case "vierge":
-            break;
-
-        default:
-            drawGrid(size, color);
-    }
-
-    console.log("Feuille générée :", type);
-}
-
-
-
-
+    generate();
+};
