@@ -58,3 +58,231 @@
 </body>
 </html>
 
+document.addEventListener("DOMContentLoaded", () => {
+
+    const canvas = document.getElementById("sheet");
+    const ctx = canvas.getContext("2d");
+
+    const MM_TO_PX = 3.78;
+
+    function clearCanvas() {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function drawGrid(sizeMM, color) {
+        const sizePX = sizeMM * MM_TO_PX;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+
+        for (let x = 0; x <= canvas.width; x += sizePX) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+        }
+
+        for (let y = 0; y <= canvas.height; y += sizePX) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+        }
+    }
+
+    function drawDottedGrid(sizeMM, color) {
+        const sizePX = sizeMM * MM_TO_PX;
+        ctx.fillStyle = color;
+
+        for (let x = 0; x <= canvas.width; x += sizePX) {
+            for (let y = 0; y <= canvas.height; y += sizePX) {
+                ctx.beginPath();
+                ctx.arc(x, y, 1, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+    }
+
+    window.generate = function () {
+        clearCanvas();
+
+        const type = document.getElementById("type").value;
+        const color = document.getElementById("color").value;
+
+        if (type === "quadrille5") drawGrid(5, color);
+        if (type === "quadrille10") drawGrid(10, color);
+        if (type === "pointille5") drawDottedGrid(5, color);
+        if (type === "vierge") return;
+    };
+
+    window.downloadPNG = function () {
+        const link = document.createElement("a");
+        link.download = "feuille.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    };
+
+    window.downloadPDF = function () {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("portrait", "mm", "a4");
+
+        const img = canvas.toDataURL("image/png");
+        pdf.addImage(img, "PNG", 10, 10, 190, 277);
+        pdf.save("feuille_A4.pdf");
+    };
+
+    // Génération automatique
+    generate();
+});
+document.addEventListener("DOMContentLoaded", () => {
+
+    const canvas = document.getElementById("sheet");
+    const ctx = canvas.getContext("2d");
+
+    const MM_TO_PX = 3.78;
+
+    function clearCanvas() {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function drawGrid(sizeMM, color) {
+        const sizePX = sizeMM * MM_TO_PX;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+
+        for (let x = 0; x <= canvas.width; x += sizePX) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+        }
+
+        for (let y = 0; y <= canvas.height; y += sizePX) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+        }
+    }
+
+    function drawDottedGrid(sizeMM, color) {
+        const sizePX = sizeMM * MM_TO_PX;
+        ctx.fillStyle = color;
+
+        for (let x = 0; x <= canvas.width; x += sizePX) {
+            for (let y = 0; y <= canvas.height; y += sizePX) {
+                ctx.beginPath();
+                ctx.arc(x, y, 1, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+    }
+
+    window.generate = function () {
+        clearCanvas();
+
+        const type = document.getElementById("type").value;
+        const color = document.getElementById("color").value;
+
+        if (type === "quadrille5") drawGrid(5, color);
+        if (type === "quadrille10") drawGrid(10, color);
+        if (type === "pointille5") drawDottedGrid(5, color);
+        if (type === "vierge") return;
+    };
+
+    window.downloadPNG = function () {
+        const link = document.createElement("a");
+        link.download = "feuille.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    };
+
+    window.downloadPDF = function () {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("portrait", "mm", "a4");
+
+        const img = canvas.toDataURL("image/png");
+        pdf.addImage(img, "PNG", 10, 10, 190, 277);
+        pdf.save("feuille_A4.pdf");
+    };
+
+    // Génération automatique
+    generate();
+});
+/* RESET */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* GLOBAL */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* MENU */
+.menu {
+    background: #ffffff;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.menu .logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.menu ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+}
+
+.menu a:hover {
+       color: #007bff;
+}
+
+/* Décalage pour menu sticky */
+.section {
+    scroll-margin-top: 90px;
+} 
+
+/* Donner de la hauteur aux sections */
+.section {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Mieux équilibrer le générateur */
+#generateur {
+    min-height: 80vh;
+}
+
+/* Donner plus de présence au canvas */
+canvas {
+    margin: 30px auto;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* BONUS : équilibre visuel bas de page */
+main {
+    padding-bottom: 60px;
