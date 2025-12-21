@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de feuilles PDF / PNG</title>
+    <meta name="description" content="Créez des feuilles vierges, quadrillées ou pointillées en PDF ou PNG. Impression A4 exacte.">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="menu">
+    <div class="logo">Générateur de Feuilles</div>
+</header>
+
+<main>
+
+<section id="generateur" class="section">
+    <h1>Générateur de feuilles A4</h1>
+    <p>Générez instantanément vos feuilles prêtes à imprimer.</p>
+
+    <div class="controls">
+
+        <label>Type de feuille :</label>
+        <select id="type">
+            <option value="quadrille5" selected>Quadrillée 5×5 mm</option>
+            <option value="vierge">Vierge</option>
+            <option value="quadrille10">Quadrillée 1 cm</option>
+            <option value="pointille5">Pointillée 5 mm</option>
+        </select>
+
+        <label>Couleur :</label>
+        <input type="color" id="color" value="#cccccc">
+
+        <button onclick="generate()">Générer</button>
+
+    </div>
+
+    <canvas id="sheet" width="794" height="1123"></canvas>
+
+    <div class="buttons">
+        <button onclick="downloadPNG()">Télécharger PNG</button>
+        <button onclick="downloadPDF()">Télécharger PDF</button>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    © 2025 Générateur de feuilles
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
 
