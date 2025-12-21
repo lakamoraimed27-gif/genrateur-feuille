@@ -1,82 +1,77 @@
-const canvas = document.getElementById("sheet");
-const ctx = canvas.getContext("2d");
+document.addEventListener("DOMContentLoaded", () => {
 
-const MM_TO_PX = 3.78;
+    const canvas = document.getElementById("sheet");
+    const ctx = canvas.getContext("2d");
 
-// Effacer le canvas
-function clearCanvas() {
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-}
+    const MM_TO_PX = 3.78;
 
-// Grille quadrillée
-function drawGrid(sizeMM, color) {
-    const sizePX = sizeMM * MM_TO_PX;
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 1;
-
-    for (let x = 0; x <= canvas.width; x += sizePX) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        ctx.stroke();
+    function clearCanvas() {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    for (let y = 0; y <= canvas.height; y += sizePX) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        ctx.stroke();
-    }
-}
+    function drawGrid(sizeMM, color) {
+        const sizePX = sizeMM * MM_TO_PX;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
 
-// Grille pointillée
-function drawDottedGrid(sizeMM, color) {
-    const sizePX = sizeMM * MM_TO_PX;
-    ctx.fillStyle = color;
+        for (let x = 0; x <= canvas.width; x += sizePX) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+        }
 
-    for (let x = 0; x <= canvas.width; x += sizePX) {
         for (let y = 0; y <= canvas.height; y += sizePX) {
             ctx.beginPath();
-            ctx.arc(x, y, 1, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
         }
     }
-}
 
-// Génération
-function generate() {
-    clearCanvas();
+    function drawDottedGrid(sizeMM, color) {
+        const sizePX = sizeMM * MM_TO_PX;
+        ctx.fillStyle = color;
 
-    const type = document.getElementById("type").value;
-    const color = document.getElementById("color").value;
+        for (let x = 0; x <= canvas.width; x += sizePX) {
+            for (let y = 0; y <= canvas.height; y += sizePX) {
+                ctx.beginPath();
+                ctx.arc(x, y, 1, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+    }
 
-    if (type === "quadrille5") drawGrid(5, color);
-    if (type === "quadrille10") drawGrid(10, color);
-    if (type === "pointille5") drawDottedGrid(5, color);
-    if (type === "vierge") return;
-}
+    window.generate = function () {
+        clearCanvas();
 
-// Télécharger PDF
-function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("portrait", "mm", "a4");
+        const type = document.getElementById("type").value;
+        const color = document.getElementById("color").value;
 
-    const img = canvas.toDataURL("image/png");
-    pdf.addImage(img, "PNG", 10, 10, 190, 277);
-    pdf.save("feuille_A4.pdf");
-}
+        if (type === "quadrille5") drawGrid(5, color);
+        if (type === "quadrille10") drawGrid(10, color);
+        if (type === "pointille5") drawDottedGrid(5, color);
+        if (type === "vierge") return;
+    };
 
-// Télécharger PNG
-function downloadPNG() {
-    const link = document.createElement("a");
-    link.download = "feuille.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-}
+    window.downloadPNG = function () {
+        const link = document.createElement("a");
+        link.download = "feuille.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    };
 
-// Génération automatique au chargement
-window.onload = () => {
+    window.downloadPDF = function () {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("portrait", "mm", "a4");
+
+        const img = canvas.toDataURL("image/png");
+        pdf.addImage(img, "PNG", 10, 10, 190, 277);
+        pdf.save("feuille_A4.pdf");
+    };
+
+    // Génération automatique
     generate();
-};
+});
 
