@@ -1,1 +1,229 @@
+generateurfeuille/
+│
+├──<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de feuilles PDF / PNG</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="menu">
+    <div class="logo">Générateur de Feuilles</div>
+</header>
+
+<main>
+<section id="generateur" class="section">
+    <h1>Générateur de feuilles A4</h1>
+    <p>Générez instantanément vos feuilles prêtes à imprimer.</p>
+
+    <div class="controls">
+        <label>Type de feuille :</label>
+        <select id="type">
+            <option value="quadrille5" selected>Quadrillée 5×5 mm</option>
+            <option value="vierge">Vierge</option>
+            <option value="quadrille10">Quadrillée 1 cm</option>
+            <option value="pointille5">Pointillée 5 mm</option>
+            <option value="hexagonale">Hexagonale</option>
+        </select>
+
+        <label>Couleur :</label>
+        <input type="color" id="color" value="#cccccc">
+
+        <button onclick="generate()">Générer</button>
+    </div>
+
+    <canvas id="sheet" width="794" height="1123"></canvas>
+
+    <div class="buttons">
+        <button onclick="downloadPNG()">Télécharger PNG</button>                                
+        <button onclick="downloadPDF()">Télécharger PDF</button>
+    </div>
+</section>
+</main>
+
+<footer>© 2025 Générateur de feuilles</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
+ 
+├── document.addEventListener("DOMContentLoaded", () => {
+    const canvas = document.getElementById("sheet");
+    const ctx = canvas.getContext("2d");
+    const MM_TO_PX = 3.78;
+
+    function clearCanvas() {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function drawGrid(sizeMM, color) {
+        const step = sizeMM * MM_TO_PX;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        for (let x = 0; x <= canvas.width; x += step) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, canvas.height);
+            ctx.stroke();
+        }
+        for (let y = 0; y <= canvas.height; y += step) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(canvas.width, y);
+            ctx.stroke();
+        }
+    }
+
+    function drawDottedGrid(sizeMM, color) {
+        const step = sizeMM * MM_TO_PX;
+        ctx.fillStyle = color;
+        for (let x = 0; x <= canvas.width; x += step) {
+            for (let y = 0; y <= canvas.height; y += step) {
+                ctx.beginPath();
+                ctx.arc(x, y, 1, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+    }
+
+    function drawHexagonalGrid(sizeMM, color) {
+        const size = sizeMM * MM_TO_PX;
+        const hexHeight = Math.sqrt(3) * size;
+        const horiz = 1.5 * size;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        for (let y = 0; y < canvas.height + hexHeight; y += hexHeight) {
+            for (let x = 0; x < canvas.width + size; x += horiz) {
+                const offsetY = (Math.round(x / horiz) % 2) * (hexHeight / 2);
+                drawHexagon(x, y + offsetY, size);
+            }
+        }
+    }
+
+    function drawHexagon(cx, cy, r) {
+        ctx.beginPath();
+        for (let i = 0; i < 6; i++) {
+            const angle = Math.PI / 3 * i;
+            const x = cx + r * Math.cos(angle);
+            const y = cy + r * Math.sin(angle);
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.stroke();
+    }
+
+    window.generate = function () {
+        clearCanvas();
+        const type = document.getElementById("type").value;
+        const color = document.getElementById("color").value;
+        if (type === "quadrille5") drawGrid(5, color);
+        if (type === "quadrille10") drawGrid(10, color);
+        if (type === "pointille5") drawDottedGrid(5, color);
+        if (type === "hexagonale") { ctx.lineWidth = 1.2; drawHexagonalGrid(8, color); }
+    };
+
+    window.downloadPNG = function () {
+        const a = document.createElement("a");
+        a.download = "feuille.png";
+        a.href = canvas.toDataURL("image/png");
+        a.click();
+    };
+
+    window.downloadPDF = function () {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF("portrait", "mm", "a4");
+        const img = canvas.toDataURL("image/png");
+        pdf.addImage(img, "PNG", 10, 10, 190, 277);
+        pdf.save("feuille_A4.pdf");
+    };
+
+    generate();
+});
+
+└──/* RESET */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* GLOBAL */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* MENU */
+.menu {
+    background: #ffffff;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.menu .logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.menu ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+}
+
+.menu a:hover {
+       color: #007bff;
+}
+
+/* Décalage pour menu sticky */
+.section {
+    scroll-margin-top: 90px;
+} 
+
+/* Donner de la hauteur aux sections */
+.section {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Mieux équilibrer le générateur */
+#generateur {
+    min-height: 80vh;
+}
+
+/* Donner plus de présence au canvas */
+canvas {
+    margin: 30px auto;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* BONUS : équilibre visuel bas de page */
+main {
+    padding-bottom: 60px;
+
+
+
+
+
 
