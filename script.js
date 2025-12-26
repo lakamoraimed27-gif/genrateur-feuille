@@ -86,7 +86,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (type === "quadrille5") drawGrid(5, color);
         if (type === "quadrille10") drawGrid(10, color);
         if (type === "pointille5") drawDottedGrid(5, color);
-        if (type === "hexagonale") drawHexagonalGrid(5, color);
+        if (type === "hexagonale") { 
+    ctx.lineWidth = 1.2;
+    drawHexagonalGrid(8, color);
+}
         if (type === "vierge") return;
     };
 
@@ -109,3 +112,4 @@ document.addEventListener("DOMContentLoaded", () => {
     // Auto
     generate();
 });
+
